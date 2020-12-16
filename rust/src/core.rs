@@ -23,6 +23,11 @@ pub fn memoize<F, A, B>(f: F) -> impl FnMut(A) -> B
     }
 }
 
+pub trait Monoid<Op> {
+    fn neutral() -> Self;
+    fn product(&self, other: &Self) -> Self;
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
