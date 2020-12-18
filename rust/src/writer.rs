@@ -1,4 +1,4 @@
-use super::core::Monoid;
+use crate::core::Monoid;
 
 pub struct Writer<T, M, Op>
   where T: Copy,

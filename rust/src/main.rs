@@ -1,11 +1,16 @@
-use rust::writer::{
-    self,
-    Writer,
+use cth::{
+    core::{
+        Monoid,
+    },
+    writer::{
+        self,
+        Writer,
+    },
 };
 
 struct Plus { }
 
-impl rust::core::Monoid<Plus> for String {
+impl Monoid<Plus> for String {
     fn neutral() -> String {
         "".to_owned()
     }
