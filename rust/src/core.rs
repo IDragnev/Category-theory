@@ -51,7 +51,7 @@ mod tests {
 
     #[test]
     fn memoize_test() {
-        let f = memoize(id);
+        let mut f = memoize(id);
 
         assert!(f(1) == 1);
         assert!(f(1) == 1);
