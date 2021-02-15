@@ -32,4 +32,21 @@ instance Bifunctor Either where
     bimap f _ (Left x)  = Left (f x)
     bimap _ g (Right y) = Right (g y)
 
+data Identity a = Identity a
+
+instance Functor Identity where
+    fmap f (Identity x) = Identity (f x)
+
+newtype BiComp bf fu gu a b = BiComp (bf (fu a) (gu b))
+
+instance (Bifunctor bf, Functor fu, Functor gu) =>
+    Bifunctor (BiComp bf fu gu) where
+        bimap f1 f2 (BiComp x) = BiComp ((bimap (fmap f1) (fmap f2)) x)
+
+data Tree a = Leaf a | Node (Tree a) (Tree a)
+
+instance Functor Tree where
+    fmap f (Leaf a)     = Leaf (f a)
+    fmap f (Node t1 t2) = Node (fmap f t1) (fmap f t2)
+
 main = print "haskell rocks"

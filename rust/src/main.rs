@@ -1,30 +1,24 @@
-use cth::{
-    core::{
-        Monoid,
-    },
-    writer::{
-        self,
-        Writer,
-    },
-};
+#[allow(dead_code)]
+enum Tree<T> {
+    Leaf(T),
+    Node(Box<Tree<T>>, Box<Tree<T>>),
+}
 
-struct Plus { }
-
-impl Monoid<Plus> for String {
-    fn neutral() -> String {
-        "".to_owned()
-    }
-
-    fn product(&self, other: &String) -> String {
-        self.clone() + other
+#[allow(dead_code)]
+fn fmap<A, B, F>(t: &Tree<A>, f: F) -> Tree<B> 
+  where F: Fn(&A) -> B + Copy
+{
+    match t {
+        Tree::Leaf(a) => Tree::Leaf(f(a)),
+        Tree::Node(t1, t2) => {
+            Tree::Node(
+                Box::new(fmap(&t1, f)),
+                Box::new(fmap(&t2, f)),
+            )
+        },
     }
 }
 
 fn main() {
-    let f = writer::compose(
-        |x| Writer::new(x, format!("just {}...", x)),
-        |y| Writer::new(y + 1, " plus 1...".to_owned()),
-    );
-    let w = f(2);
-    println!("value = {0}, log = {1}", w.value, w.context);
+    println!("Rust {}!", "rocks");
 }
