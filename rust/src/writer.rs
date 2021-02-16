@@ -18,6 +18,11 @@ impl<T, M, Op> Writer<T, M, Op>
             pd: std::marker::PhantomData,
         }
     }
+
+    pub fn fmap<U>(self, f: impl Fn(T) -> U) -> Writer<U, M, Op> {
+        let h = compose(|x| ret(f(x)), |x| x);
+        h(self)
+    }
 }
 
 pub fn ret<T, M, Op>(x: T) -> Writer<T, M, Op>
@@ -37,13 +42,6 @@ pub fn compose<F, G, A, B, C, M, Op>(g: G, f: F) -> impl Fn(A) -> Writer<C, M, O
         let w2 = g(w1.value);
         Writer::new(w2.value, M::product(&w1.context, &w2.context))
     }
-}
-
-pub fn fmap<A, B, M, Op>(w: Writer<A, M, Op>, f: impl Fn(A) -> B) -> Writer<B, M, Op> 
-  where M: Monoid<Op>,
-{
-    let h = compose(|x| ret(f(x)), |x| x);
-    h(w)
 }
 
 #[cfg(test)]
@@ -77,9 +75,10 @@ mod tests {
     #[test]
     fn functoriality() {
         let w = Writer::new(2, "context".to_owned());
-        let w = fmap(w, |x| x.to_string());
+        let w = w.fmap(|x| x * x)
+                 .fmap(|x| x.to_string());
 
-        assert!(w.value == "2");
+        assert!(w.value == "4");
         assert!(w.context == "context");
     }
 }

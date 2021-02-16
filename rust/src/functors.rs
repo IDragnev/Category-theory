@@ -8,3 +8,11 @@ pub mod reader {
         crate::core::compose(f, g)
     }
 }
+
+pub struct Identity<T>(T);
+
+impl<T> Identity<T> {
+    pub fn fmap<U>(self, f: impl Fn(T) -> U) -> Identity<U> {
+        Identity(f(self.0))
+    }
+}
