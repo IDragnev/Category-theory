@@ -49,4 +49,8 @@ instance Functor Tree where
     fmap f (Leaf a)     = Leaf (f a)
     fmap f (Node t1 t2) = Node (fmap f t1) (fmap f t2)
 
+instance Profunctor (->) where
+    lmap = flip (.)
+    rmap = (.)
+
 main = print "haskell rocks"

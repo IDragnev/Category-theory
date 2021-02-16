@@ -16,3 +16,14 @@ class Bifunctor f where
     first g = bimap g id
     second :: (b -> d) -> f a b -> f a d
     second = bimap id
+
+class Contravariant f where
+    contramap :: (b -> a) -> (f a -> f b)
+
+class Profunctor p where
+    dimap :: (a -> b) -> (c -> d) -> p b c -> p a d
+    dimap f g = lmap f . rmap g
+    lmap :: (a -> b) -> p b c -> p a c
+    lmap f = dimap f id
+    rmap :: (c -> d) -> p a c -> p a d
+    rmap = dimap id
