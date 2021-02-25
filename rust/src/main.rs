@@ -19,6 +19,24 @@ fn fmap<A, B, F>(t: &Tree<A>, f: F) -> Tree<B>
     }
 }
 
+#[allow(dead_code)]
+struct Pair<A, B> {
+    left: A,
+    right: B,
+}
+
+#[allow(dead_code)]
+impl<A, B> Pair<A, B> {
+    fn bimap<C, D>(self, f: impl Fn(A) -> C, g: impl Fn(B) -> D)
+        -> Pair<C, D>
+    {
+        Pair {
+            left: f(self.left),
+            right: g(self.right),
+        }
+    }
+}
+
 fn main() {
     println!("Rust {}!", "rocks");
 }

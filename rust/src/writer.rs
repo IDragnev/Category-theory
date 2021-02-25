@@ -20,7 +20,7 @@ impl<T, M, Op> Writer<T, M, Op>
     }
 
     pub fn fmap<U>(self, f: impl Fn(T) -> U) -> Writer<U, M, Op> {
-        let h = compose(|x| ret(f(x)), |x| x);
+        let h = self::compose(|x| ret(f(x)), |x| x);
         h(self)
     }
 }
